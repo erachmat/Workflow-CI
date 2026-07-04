@@ -55,7 +55,7 @@ jobs:
       - name: Build Docker Image via MLflow
         shell: bash -l {0}
         run: |
-          mlflow models build-docker -m MLProject/saved_model -n ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest --env-manager virtualenv
+          mlflow models build-docker -m MLProject/saved_model -n ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest --env-manager virtualenv --base-image python:3.10-slim
 
       - name: Push Docker Image to Docker Hub
         run: |
