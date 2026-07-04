@@ -25,11 +25,28 @@ def train_baseline():
         score = model.score(X_test, y_test)
         print(f"Test Accuracy: {score:.4f}")
         
-        # Explicitly save the model to a local directory for easy GitHub Action access
         if os.path.exists("saved_model"):
             shutil.rmtree("saved_model")
+            
+        # FIX: Explicitly enforce Python 3.10.12 to bypass the get-pip.py Python 3.9 bug
+        custom_env = {
+            "name": "telco_env",
+            "channels": ["conda-forge"],
+            "dependencies": [
+                "python=3.10.12",
+                "pip",
+                {
+                    "pip": [
+                        "mlflow==2.19.0",
+                        "scikit-learn==1.5.2",
+                        "pandas==2.2.2",
+                        "numpy==1.26.4"
+                    ]
+                }
+            ]
+        }
         
-        mlflow.sklearn.save_model(model, "saved_model")
+        mlflow.sklearn.save_model(model, "saved_model", conda_env=custom_env)
         print("Model saved locally to 'saved_model' directory.")
 
 if __name__ == "__main__":
