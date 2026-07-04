@@ -11,7 +11,7 @@ permissions:
 jobs:
   train-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.10"
-          
+
       - name: Install MLflow
         shell: bash -l {0}
         run: pip install mlflow==2.19.0
@@ -47,11 +47,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # THE FINAL FIX: Use 'uv' as the env-manager. It bypasses both Pip deprecations and Conda ToS blocks!
+      # Use 'conda' as the env-manager -- matches the custom_env (Python 3.10.12, pinned
+        # package versions) already defined in modelling.py's mlflow.sklearn.save_model() call.
       - name: Build Docker Image via MLflow
         shell: bash -l {0}
         run: |
-          mlflow models build-docker -m MLProject/saved_model -n ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest --env-manager uv
+          mlflow models build-docker -m MLProject/saved_model -n ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest --env-manager conda
 
       - name: Push Docker Image to Docker Hub
         run: |
