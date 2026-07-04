@@ -24,7 +24,9 @@ jobs:
 
       - name: Install MLflow
         shell: bash -l {0}
-        run: pip install mlflow==2.15.0  # or use a newer version like 2.16.0+  
+        run: |
+          pip install setuptools
+          pip install mlflow==2.15.0
 
       - name: Train Model (MLflow Project)
         shell: bash -l {0}
@@ -51,7 +53,7 @@ jobs:
         shell: bash -l {0}
         run: |
           mlflow models build-docker -m MLProject/saved_model -n ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest --env-manager virtualenv
-          
+
       - name: Push Docker Image to Docker Hub
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest
