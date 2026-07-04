@@ -25,8 +25,9 @@ jobs:
       - name: Install MLflow
         shell: bash -l {0}
         run: |
-          pip install setuptools
-          pip install mlflow==2.15.0
+          conda install -y pip setuptools
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install mlflow==2.15.0 virtualenv
 
       - name: Train Model (MLflow Project)
         shell: bash -l {0}
