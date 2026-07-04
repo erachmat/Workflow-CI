@@ -31,7 +31,9 @@ def train_baseline():
         # FIX: Explicitly enforce Python 3.10.12 to bypass the get-pip.py Python 3.9 bug
         custom_env = {
             "name": "telco_env",
-            "channels": ["conda-forge"],
+            "channels": ["conda-forge", "nodefaults"],  # "nodefaults" tells conda to never
+            # touch/validate the Anaconda "defaults" channels, avoiding the ToS-acceptance
+            # gate that blocks non-interactive builds.
             "dependencies": [
                 "python=3.10.12",
                 "pip",
