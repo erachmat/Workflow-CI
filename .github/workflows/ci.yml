@@ -47,11 +47,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # FIX: Added --env-manager conda to safely build the image without system pip conflicts
+      # THE FINAL FIX: Use 'uv' as the env-manager. It bypasses both Pip deprecations and Conda ToS blocks!
       - name: Build Docker Image via MLflow
         shell: bash -l {0}
         run: |
-          mlflow models build-docker -m MLProject/saved_model -n ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest --env-manager conda
+          mlflow models build-docker -m MLProject/saved_model -n ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest --env-manager uv
 
       - name: Push Docker Image to Docker Hub
         run: |
