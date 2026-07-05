@@ -47,12 +47,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Build from our OWN Dockerfile instead of `mlflow models build-docker`.
-        # That command generates its own internal Dockerfile which we cannot edit, and
-        # every built-in env-manager choice (uv, conda, virtualenv) hits a hard blocker
-        # inside that auto-generated template (an open MLflow bug, an Anaconda ToS gate,
-        # and a broken get-pip.py bootstrap, respectively). Writing our own Dockerfile
-        # that just pip-installs the model's own requirements.txt avoids all three.
       - name: Build Docker Image (custom Dockerfile)
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest -f MLProject/Dockerfile MLProject/
